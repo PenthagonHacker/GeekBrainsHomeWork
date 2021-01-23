@@ -29,12 +29,11 @@ with open('player.txt', 'r+', encoding='utf-8') as card:
             used_barrels.append(barrel)
             answer = input('Вы хотите зачеркнуть число? Y (да)/ N(нет)')
             if any([answer == 'Y' and check_card(barrel), answer == 'N' and check_card(barrel) == False]): # проверка правильности действий игрока
-                  # здесь тоже 'каретку' в начало файла иначе не работает !!!!
                 if len(barrel) == 1:  # проверка если выпало однозначное число
                     file = file.replace(' ' + barrel + ' ', ' - ')  # чтобы не заменяло цифры в двухзначных числах, если выпало однозначное число
                 else:
                     file = file.replace(barrel, '-')  # просто заменяем число, если оно двухзначное
-                card.seek(0)
+                card.seek(0)  # здесь тоже 'каретку' в начало файла иначе не работает !!!!
                 card.write(file)
             else:
                 print('Вы проиграли')
