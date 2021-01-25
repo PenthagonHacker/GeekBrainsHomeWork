@@ -4,38 +4,53 @@ from game import *
 class Game:
     @staticmethod
     def play():
-        card = CardGenerator.generate_card()
+        user_card = CardGenerator('User').generate_card()
+        comp_card = CardGenerator('Computer').generate_card()
         from random import randint
         cnt_barrel = 90
         used_barrels = []
-        while digit_in_card(card) is True:
-            barrel = str(randint(1, 91))
+        while digit_in_card(user_card) is True:
+            barrel = str(randint(1, 90))
             if barrel not in used_barrels:
                 cnt_barrel -= 1
-                print(f'Выпало число {barrel}. Осталось {cnt_barrel} бачонков')
-                print(card, end='\n')
+                print(comp_card, end='\n\n')
+                print(f'Выпало число {barrel}. Осталось {cnt_barrel} бачонков\n')
+                print(user_card, end='\n\n')
                 used_barrels.append(barrel)
-                answer = input('Вы хотите зачеркнуть число? Y (да)/ N(нет)')
-                if any([answer == 'Y' and check_card(barrel, card),
-                        answer == 'N' and check_card(barrel, card) == False]):  # проверка правильности действий игрока
+                answer = input('Вы хотите зачеркнуть число? Y (да)/ N(нет)  ')
+                if any([answer == 'Y' and check_card(barrel, user_card),
+                        answer == 'N' and check_card(barrel,
+                                                     user_card) == False]):  # проверка правильности действий игрока
                     if len(barrel) == 1:  # проверка если выпало однозначное число
-                        card = card.replace(' ' + barrel + ' ',
-                                            ' - ')  # чтобы не заменяло цифры в двухзначных числах, если выпало однозначное число
+                        user_card = user_card.replace(' ' + barrel + ' ',
+                                                      ' - ')  # чтобы не заменяло цифры в двухзначных числах, если выпало однозначное число
                     else:
-                        card = card.replace(barrel, '-')  # просто заменяем число, если оно двухзначное
+                        user_card = user_card.replace(barrel, '- ')  # просто заменяем число, если оно двухзначное
                 else:
                     print('Вы проиграли')
                     break
-        if digit_in_card(card) is False:
+                if len(barrel) == 1:
+                    comp_card = comp_card.replace(' ' + barrel + ' ', ' - ')
+                else:
+                    comp_card = comp_card.replace(barrel, '- ')
+            if digit_in_card(comp_card) is False:
+                return 'Компьютер победил'
+
+        if digit_in_card(user_card) is False:
             print('Вы выиграли')
 
 
 class CardGenerator:
-    @staticmethod
-    def generate_card():
+    def __init__(self, name):
+        self.name = name
+
+    def generate_card(self):
         from random import randint
         s = set()
-        card = '------ Ваша карточка -----\n** **          **    ** **\n   ** **     **   **    **\n** **    **    **    **\n--------------------------'
+        if self.name == 'User':
+            card = '------ Ваша карточка -----\n** **          **    ** ** \n   ** **     **   **    ** \n** **    **    **    ** \n--------------------------'
+        else:
+            card = '--- Карточка компьютера ---\n** **          **    ** ** \n   ** **     **   **    ** \n** **    **    **    ** \n---------------------------'
         while len(s) < 15:
             number = str(randint(1, 91))
             if number not in s:
