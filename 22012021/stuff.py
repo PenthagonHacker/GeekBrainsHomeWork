@@ -18,6 +18,8 @@ class Game:
                 print(user_card, end='\n\n')
                 used_barrels.append(barrel)
                 answer = input('Вы хотите зачеркнуть число? Y (да)/ N(нет)  ')
+                while all([answer != 'Y', answer != 'N']):
+                    answer = input('Вы хотите зачеркнуть число? Y (да)/ N(нет)  ')
                 if any([answer == 'Y' and check_card(barrel, user_card),
                         answer == 'N' and check_card(barrel,
                                                      user_card) == False]):  # проверка правильности действий игрока
@@ -33,11 +35,12 @@ class Game:
                     comp_card = comp_card.replace(' ' + barrel + ' ', ' - ')
                 else:
                     comp_card = comp_card.replace(barrel, '- ')
-            if digit_in_card(comp_card) is False:
-                return 'Компьютер победил'
-
-        if digit_in_card(user_card) is False:
-            print('Вы выиграли')
+            if all([digit_in_card(user_card) is False, digit_in_card(comp_card) is False]):
+                print('Ничья')
+            elif digit_in_card(comp_card) is False:
+                print('Компьютер победил')
+            elif digit_in_card(user_card) is False:
+                print('Вы выиграли')
 
 
 class CardGenerator:
